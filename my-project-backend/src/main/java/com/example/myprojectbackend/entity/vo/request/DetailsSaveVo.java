@@ -1,6 +1,5 @@
 package com.example.myprojectbackend.entity.vo.request;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
