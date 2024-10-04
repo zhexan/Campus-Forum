@@ -3,9 +3,7 @@ package com.example.myprojectbackend.service.Impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.myprojectbackend.entity.dto.Account;
-import com.example.myprojectbackend.entity.vo.request.ConfirmResetVO;
-import com.example.myprojectbackend.entity.vo.request.EmailRegisterVO;
-import com.example.myprojectbackend.entity.vo.request.EmailResetVO;
+import com.example.myprojectbackend.entity.vo.request.*;
 import com.example.myprojectbackend.mapper.AccountMapper;
 import com.example.myprojectbackend.service.AccountService;
 import com.example.myprojectbackend.utils.Const;
@@ -115,6 +113,45 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         }
         return update ? null : "内部错误";
 
+    }
+
+    public Account findAccountById(int id) {
+        return this.query().eq("id", id).one();
+    }
+
+    /**
+     * 修改邮箱
+     * @param id
+     * @param vo
+     * @return
+     */
+    @Override
+    public String modifyEmail(int id, ModifyEmailVO vo) {
+        String email = vo.getEmail();
+        String code = this.getEmailVerifyCode(email);
+        if(code == null) {
+            return "请先获取验证码";
+        }
+        if(!code.equals(vo.getCode())) {
+            return "验证码输入错误";
+        }
+        Account account = this.findAccountByUsernameOrEmail(email);
+        if(account != null && account.getId() != id) {
+            return "该邮箱已被注册";
+        }
+        this.update().eq("id", id).set("email", email).update();
+        return null;
+    }
+
+    public String changePassword(int id, ChangePasswordVO vo) {
+        String password = this.query().eq("id", id).one().getPassword();
+        if(!encoder.matches(vo.getPassword(), password)) {
+            return "密码错误";
+        } else {
+            return this.update().eq("id", id)
+                    .set("password", encoder.encode(vo.getNew_password()))
+                    .update() ? null : "内部错误";
+        }
     }
 
     private boolean verifyLimit(String ip) {
