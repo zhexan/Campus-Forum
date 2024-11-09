@@ -1,12 +1,14 @@
 package com.example.myprojectbackend.filter;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.myprojectbackend.utils.Const;
 import com.example.myprojectbackend.utils.JWTUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,8 +23,8 @@ public class JWTAuthorizeFilter extends OncePerRequestFilter {
     JWTUtils utils;
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+                                    @NotNull HttpServletResponse response,
+                                    @NotNull FilterChain filterChain)
             throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
         DecodedJWT jwt = utils.resolveJWT(authorization);
@@ -32,7 +34,7 @@ public class JWTAuthorizeFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            request.setAttribute("id", utils.toId(jwt));
+            request.setAttribute(Const.ATTR_USER_ID, utils.toId(jwt));
         }
         filterChain.doFilter(request, response);
     }

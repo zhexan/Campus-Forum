@@ -23,6 +23,8 @@ spring:
     endpoint: http://localhost:9000
     username: minio
     password: password
+  weather:
+    key: b6d5f378791847dfa3924d0591066424
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

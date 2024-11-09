@@ -25,6 +25,7 @@ public class AccountPrivacyServiceImpl extends ServiceImpl<AccountPrivacyMapper,
             case "gender" -> privacy.setGender(status);
         }
         this.saveOrUpdate(privacy);
+
     }
     public AccountPrivacy accountPrivacy(int id) {
         return Optional.ofNullable(this.getById(id)).orElse(new AccountPrivacy(id));
