@@ -30,20 +30,29 @@ const router = createRouter({
             children: [
                 {
                     path: '',
-                    name: 'topic-list',
-                    component: () => import('@/views/forum/TopicList.vue')
+                    name: 'topics',
+                    component: () => import('@/views/forum/Forum.vue'),
+                    children: [
+                        {
+                            path: '',
+                            name: 'topic-list',
+                            component: () => import('@/views/forum/TopicList.vue')
+                        },{
+                            path: 'topic-detail/:tid',
+                            name: 'topic-detail',
+                            component: () => import('@/views/forum/TopicDetail.vue')
+                        }
+                    ]
                 }, {
-                    path: 'user-settings',
-                    name: 'user-settings',
-                    component: () => import('@/views/settings/UserSettings.vue')
+                    path: 'user-setting',
+                    name: 'user-setting',
+                    component: () => import('@/views/settings/UserSetting.vue')
                 }, {
-                    path: 'privacy-settings',
-                    name: 'privacy-settings',
-                    component: () => import('@/views/settings/PrivacySettings.vue')
+                    path: 'privacy-setting',
+                    name: 'privacy-setting',
+                    component: () => import('@/views/settings/PrivacySetting.vue')
                 }
-
             ]
-
         }
     ]
 })

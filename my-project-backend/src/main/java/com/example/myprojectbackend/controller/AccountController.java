@@ -54,13 +54,13 @@ public class AccountController {
         String result = accountService.modifyEmail(id, vo);
         return result == null ? RestBean.success() : RestBean.failure(400, result);
     }
-    @PostMapping("/change_password")
+    @PostMapping("/change-password")
     public RestBean<Void> changePassword(@RequestAttribute("id") int id,
                                          @RequestBody @Valid ChangePasswordVO vo){
         String result = accountService.changePassword(id, vo);
         return result == null ? RestBean.success() : RestBean.failure(400, result);
     }
-    @PostMapping("/save_privacy")
+    @PostMapping("/save-privacy")
     public RestBean<Void> savePrivacy(@RequestAttribute("id") int id,
                                       @RequestBody @Valid AccountPrivacyVO vo) {
         accountPrivacyService.savePrivacy(id, vo);

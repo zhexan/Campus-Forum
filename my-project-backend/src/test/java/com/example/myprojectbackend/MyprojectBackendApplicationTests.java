@@ -9,7 +9,9 @@ class MyprojectBackendApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(new BCryptPasswordEncoder().encode("123456"));
+       int i = Integer.MAX_VALUE;
+        System.out.println(i + 2);
     }
+
 
 }
