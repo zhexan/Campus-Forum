@@ -2,11 +2,13 @@ package com.example.myprojectbackend.service.Impl;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.myprojectbackend.entity.dto.Topic;
 import com.example.myprojectbackend.entity.dto.TopicType;
 import com.example.myprojectbackend.entity.vo.request.TopicCreateVO;
 import com.example.myprojectbackend.entity.vo.response.TopicPreviewVO;
+import com.example.myprojectbackend.entity.vo.response.TopicTopVO;
 import com.example.myprojectbackend.mapper.TopicMapper;
 import com.example.myprojectbackend.mapper.TopicTypeMapper;
 import com.example.myprojectbackend.service.TopicService;
@@ -90,7 +92,7 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
         if(topics.isEmpty()) return null;
         list = topics.stream().map(this::resolveToPreview).toList();
         cacheUtils.saveListToCache(key, list, 20);
-        return null;
+        return list;
 
     }
 
@@ -113,6 +115,25 @@ public class TopicServiceImpl extends ServiceImpl<TopicMapper, Topic> implements
         vo.setImages(images);
         return vo;
     }
+
+    /**
+     * 获取置顶文章
+     * @return 置顶文章的列表
+     * @since 2025-1-19-20:04
+     */
+    @Override
+    public List<TopicTopVO> listTopTopic() {
+       List<Topic> topics = baseMapper.selectList(Wrappers.<Topic>query()
+               .select("id", "title", "time")
+               .eq("top", "1"));
+       // 重点复习Stream流的使用
+       return topics.stream().map(topic -> {
+           TopicTopVO vo = new TopicTopVO();
+           BeanUtils.copyProperties(topic, vo);
+           return vo;
+       }).toList();
+    }
+
     /**
      * 文章计数限制，超过两万字，无法发表
      * @param object 文章内容

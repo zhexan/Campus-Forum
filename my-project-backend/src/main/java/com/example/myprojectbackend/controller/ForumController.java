@@ -1,9 +1,9 @@
 package com.example.myprojectbackend.controller;
 
 import com.example.myprojectbackend.entity.RestBean;
-import com.example.myprojectbackend.entity.dto.Topic;
 import com.example.myprojectbackend.entity.vo.request.TopicCreateVO;
 import com.example.myprojectbackend.entity.vo.response.TopicPreviewVO;
+import com.example.myprojectbackend.entity.vo.response.TopicTopVO;
 import com.example.myprojectbackend.entity.vo.response.TopicTypeVO;
 import com.example.myprojectbackend.entity.vo.response.WeatherVO;
 import com.example.myprojectbackend.service.TopicService;
@@ -51,5 +51,9 @@ public class ForumController {
                                                     @RequestParam @Min(0) int type) {
         return RestBean.success(topicService.listTopicByPage(page, type));
     }
-    
+
+    @GetMapping("top-topic")
+    public RestBean<List<TopicTopVO>> topTopic() {
+        return RestBean.success(topicService.listTopTopic());
+    }
 }

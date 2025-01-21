@@ -2,10 +2,11 @@ package com.example.myprojectbackend.entity.vo.response;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
-public class TopicTypeVO {
+public class TopicTopVO {
     int id;
-    String name;
-    String desc;
-    String color;
+    String title;
+    Date time;
 }

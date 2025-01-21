@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.example.myprojectbackend.entity.vo.response.WeatherVO;
 import com.example.myprojectbackend.service.WeatherService;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 
+@Slf4j
 @Service
 public class WeatherServiceImpl implements WeatherService {
     @Resource
@@ -33,9 +35,14 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     public WeatherVO fetchFromCache(double longitude, double latitude) {
+        log.info("正在获取天气信息");
         JSONObject geo = this.decompressStringToJSON(rest.getForObject(
                 "https://geoapi.qweather.com/v2/city/lookup?location=" + longitude + "," + latitude + "&key=" + key, byte[].class));
-        if (geo == null) return null;
+        if (geo == null) {
+            log.info("天气信息获取失败");
+            return null;
+        }
+        log.info("天气信息获取成功");
         JSONObject location = geo.getJSONArray("location").getJSONObject(0);
         int id = location.getInteger("id");
         String key = "weather" + id;
